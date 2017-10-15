@@ -293,13 +293,18 @@ addEventHandler("onClientPlayerWasted", localPlayer,
 )
 
 
-local triggeredBarrel = {}
+
+local triggeredObject = {}
 addEventHandler("onClientVehicleCollision", root, 
-	function(theBarrel, force, bodyPart, x, y, z, nx, ny, nz, hitElementforce, model)
+	function(object, force, bodyPart, x, y, z, nx, ny, nz, force, model)
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
-		if(theBarrel and source == theVehicle and model == 1218 and not triggeredBarrel[theBarrel]) then
-			triggerServerEvent("barrelHit", resourceRoot, theBarrel)		
-			triggeredBarrel[theBarrel] = true
+		if(object and source == theVehicle and not triggeredObject[object]) then
+			if(model == 1218) then
+				triggerServerEvent("barrelHit", resourceRoot, object)
+			elseif(model == 2918) then
+				setElementVelocity(source, math.random() + math.random(-1, 0), math.random() + math.random(-1, 0), math.random())
+			end
+			triggeredObject[object] = true
 		end
 	end
 )
